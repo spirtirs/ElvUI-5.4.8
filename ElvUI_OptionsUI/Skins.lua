@@ -259,9 +259,9 @@ E.Options.args.skins = {
 					name = L["Raid Info"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
-				mounts = {
+				collections = {
 					type = "toggle",
-					name = L["MOUNTS_AND_PETS"],
+					name = L["COLLECTIONS"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				petbattleui = {

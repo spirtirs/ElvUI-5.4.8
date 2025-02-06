@@ -212,7 +212,7 @@ local BLIZZARD_ADDONS = {
 	"Blizzard_MacroUI",
 	"Blizzard_MovePad",
 	"Blizzard_PetBattleUI",
-	"Blizzard_PetJournal",
+	"Blizzard_Collections",
 	"Blizzard_PVPUI",
 	"Blizzard_QuestChoice",
 	"Blizzard_RaidUI",

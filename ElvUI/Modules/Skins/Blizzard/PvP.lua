@@ -10,13 +10,12 @@ local function LoadSkin()
 
 	PVPUIFrame:StripTextures()
 	PVPUIFrame:SetTemplate("Transparent")
-	PVPUIFrame.LeftInset:StripTextures()
 	PVPUIFrame.Shadows:StripTextures()
 
 	S:HandleCloseButton(PVPUIFrameCloseButton)
 
 	-- Side Buttons
-	for i = 1, 3 do
+	for i = 1, 4 do
 		local button = _G["PVPQueueFrameCategoryButton"..i]
 
 		button:SetTemplate("Transparent")
@@ -296,6 +295,9 @@ local function LoadSkin()
 			end
 		end)
 	end
+    
+    -- Spectator Frame
+	SpectateFrame:StripTextures()
 end
 
 S:AddCallbackForAddon("Blizzard_PVPUI", "PVPUI", LoadSkin)

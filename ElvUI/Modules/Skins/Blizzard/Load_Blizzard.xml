@@ -38,7 +38,7 @@
 	<Script file="Merchant.lua"/>
 	<Script file="MirrorTimers.lua"/>
 	<Script file="Misc.lua"/>
-	<Script file="Mounts.lua"/>
+	<Script file="Collectables.lua"/>
 	<Script file="MovePad.lua"/>
 	<Script file="NoRaid.lua"/>
 	<Script file="PetBattle.lua"/>

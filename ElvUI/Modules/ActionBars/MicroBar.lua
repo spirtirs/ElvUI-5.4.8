@@ -12,7 +12,7 @@ local C_StorePublic_IsEnabled = C_StorePublic.IsEnabled
 local MICRO_BUTTONS = MICRO_BUTTONS
 
 local __buttonIndex = {
-	[9] = "CompanionsMicroButton",
+	[9] = "CollectionsMicroButton",
 	[10] = "EJMicroButton",
 	[11] = not C_StorePublic_IsEnabled() and "HelpMicroButton" or "StoreMicroButton",
 	[12] = "MainMenuMicroButton"

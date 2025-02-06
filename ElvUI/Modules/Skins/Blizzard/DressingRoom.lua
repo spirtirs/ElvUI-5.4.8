@@ -6,61 +6,41 @@ local SetDressUpBackground = SetDressUpBackground
 local function LoadSkin()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.dressingroom then return end
 
-	-- Dressing Room
+	local DressUpFrame = _G["DressUpFrame"]
 	DressUpFrame:StripTextures()
 	DressUpFrame:CreateBackdrop("Transparent")
-	DressUpFrame.backdrop:Point("TOPLEFT", 10, -12)
-	DressUpFrame.backdrop:Point("BOTTOMRIGHT", -33, 73)
 
-	DressUpFramePortrait:Kill()
-
-	S:HandleCloseButton(DressUpFrameCloseButton, DressUpFrame.backdrop)
+	DressUpFramePortrait:Hide()
+	DressUpFramePortraitFrame:Hide()
+	DressUpFrameInset:Hide()
 
 	S:HandleButton(DressUpFrameResetButton)
-	DressUpFrameResetButton:Point("RIGHT", DressUpFrameCancelButton, "LEFT", -3, 0)
-
 	S:HandleButton(DressUpFrameCancelButton)
-	DressUpFrameCancelButton:Point("CENTER", DressUpFrame, "TOPLEFT", 306, -423)
+	S:HandleButton(DressUpFrameOutfitDropDown.SaveButton)
+	DressUpFrameOutfitDropDown.SaveButton:ClearAllPoints()
+	DressUpFrameOutfitDropDown.SaveButton:SetPoint("RIGHT", DressUpFrameOutfitDropDown, 86, 4)
+	S:HandleDropDownBox(DressUpFrameOutfitDropDown)
+	DressUpFrameOutfitDropDown:SetSize(195, 34)
 
-	DressUpFrameDescriptionText:Point("CENTER", DressUpFrameTitleText, "BOTTOM", -7, -22)
+	S:HandleMaxMinFrame(MaximizeMinimizeFrame)
+	S:HandleCloseButton(DressUpFrameCloseButton)
+	DressUpFrameResetButton:Point("RIGHT", DressUpFrameCancelButton, "LEFT", -2, 0)
 
-	DressUpModel:CreateBackdrop()
-	DressUpModel.backdrop:SetOutside(DressUpBackgroundTopLeft, nil, nil, DressUpModel)
+	-- Wardrobe edit frame
+	local WardrobeOutfitFrame = _G["WardrobeOutfitFrame"]
+	WardrobeOutfitFrame:StripTextures(true)
+	WardrobeOutfitFrame:SetTemplate("Transparent")
 
-	-- Side Dressing Room
-	SideDressUpFrame:StripTextures()
-	SideDressUpFrame:CreateBackdrop("Transparent")
-	SideDressUpFrame.backdrop:Point("TOPLEFT", 1, 9)
-	SideDressUpFrame.backdrop:Point("BOTTOMRIGHT", -6, 5)
-
-	SideDressUpModel:CreateBackdrop()
-	SideDressUpModel.backdrop:Point("BOTTOMRIGHT", 1, -2)
-
-	S:HandleButton(SideDressUpModelResetButton)
-	SideDressUpModelResetButton:Point("BOTTOM", 0, 2)
-
-	S:HandleCloseButton(SideDressUpModelCloseButton)
-	SideDressUpModelCloseButton:Point("CENTER", SideDressUpFrame, "TOPRIGHT", -18, -2)
-
-	-- Model Backgrounds
-	hooksecurefunc("SetDressUpBackground", function(frame)
-		if frame.BGTopLeft then
-			frame.BGTopLeft:SetDesaturated(true)
-		end
-		if frame.BGTopRight then
-			frame.BGTopRight:SetDesaturated(true)
-		end
-		if frame.BGBottomLeft then
-			frame.BGBottomLeft:SetDesaturated(true)
-		end
-		if frame.BGBottomRight then
-			frame.BGBottomRight:SetDesaturated(true)
-		end
-	end)
-
-	-- Control Frame
-	S:HandleModelControlFrame(DressUpModelControlFrame)
-	S:HandleModelControlFrame(SideDressUpModelControlFrame)
+	local WardrobeOutfitEditFrame = _G["WardrobeOutfitEditFrame"]
+	WardrobeOutfitEditFrame:StripTextures(true)
+	WardrobeOutfitEditFrame:SetTemplate("Transparent")
+	WardrobeOutfitEditFrame.EditBox:StripTextures()
+	S:HandleEditBox(WardrobeOutfitEditFrame.EditBox)
+	WardrobeOutfitEditFrame.EditBox.backdrop:Point("TOPLEFT", WardrobeOutfitEditFrame.EditBox, "TOPLEFT", -5, -5)
+	WardrobeOutfitEditFrame.EditBox.backdrop:Point("BOTTOMRIGHT", WardrobeOutfitEditFrame.EditBox, "BOTTOMRIGHT", 0, 5)
+	S:HandleButton(WardrobeOutfitEditFrame.AcceptButton)
+	S:HandleButton(WardrobeOutfitEditFrame.CancelButton)
+	S:HandleButton(WardrobeOutfitEditFrame.DeleteButton)
 end
 
 S:AddCallback("DressingRoom", LoadSkin)

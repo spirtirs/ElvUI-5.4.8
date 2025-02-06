@@ -55,7 +55,7 @@ local menuList = {
 			HideUIPanel(PlayerTalentFrame)
 		end
 	end},
-	{text = MOUNTS_AND_PETS, notCheckable = 1, func = function()
+	{text = COLLECTIONS, notCheckable = 1, func = function()
 		TogglePetJournal()
 	end},
 	{text = ACHIEVEMENT_BUTTON, notCheckable = 1, func = function()

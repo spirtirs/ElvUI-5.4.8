@@ -197,6 +197,115 @@ function S:HandleScrollBar(frame, thumbTrimY, thumbTrimX)
 	end
 end
 
+function S:HandleScrollBar2(frame, thumbTrim)
+	if frame:GetName() then
+		if frame.Background then frame.Background:SetTexture(nil) end
+		if frame.trackBG then frame.trackBG:SetTexture(nil) end
+		if frame.Middle then frame.Middle:SetTexture(nil) end
+		if frame.Top then frame.Top:SetTexture(nil) end
+		if frame.Bottom then frame.Bottom:SetTexture(nil) end
+		if frame.ScrollBarTop then frame.ScrollBarTop:SetTexture(nil) end
+		if frame.ScrollBarBottom then frame.ScrollBarBottom:SetTexture(nil) end
+		if frame.ScrollBarMiddle then frame.ScrollBarMiddle:SetTexture(nil) end
+
+		if _G[frame:GetName().."BG"] then _G[frame:GetName().."BG"]:SetTexture(nil) end
+		if _G[frame:GetName().."Track"] then _G[frame:GetName().."Track"]:SetTexture(nil) end
+
+		if _G[frame:GetName().."Top"] then
+			_G[frame:GetName().."Top"]:SetTexture(nil)
+		end
+
+		if _G[frame:GetName().."Bottom"] then
+			_G[frame:GetName().."Bottom"]:SetTexture(nil)
+		end
+
+		if _G[frame:GetName().."Middle"] then
+			_G[frame:GetName().."Middle"]:SetTexture(nil)
+		end
+
+		if _G[frame:GetName().."ScrollUpButton"] and _G[frame:GetName().."ScrollDownButton"] then
+			_G[frame:GetName().."ScrollUpButton"]:StripTextures()
+			if not _G[frame:GetName().."ScrollUpButton"].icon then
+				S:HandleNextPrevButton2(_G[frame:GetName().."ScrollUpButton"])
+				SquareButton_SetIcon(_G[frame:GetName().."ScrollUpButton"], 'UP')
+				_G[frame:GetName().."ScrollUpButton"]:Size(_G[frame:GetName().."ScrollUpButton"]:GetWidth() + 7, _G[frame:GetName().."ScrollUpButton"]:GetHeight() + 7)
+			end
+
+			_G[frame:GetName().."ScrollDownButton"]:StripTextures()
+			if not _G[frame:GetName().."ScrollDownButton"].icon then
+				S:HandleNextPrevButton2(_G[frame:GetName().."ScrollDownButton"])
+				SquareButton_SetIcon(_G[frame:GetName().."ScrollDownButton"], 'DOWN')
+				_G[frame:GetName().."ScrollDownButton"]:Size(_G[frame:GetName().."ScrollDownButton"]:GetWidth() + 7, _G[frame:GetName().."ScrollDownButton"]:GetHeight() + 7)
+			end
+
+			if not frame.trackbg then
+				frame.trackbg = CreateFrame("Frame", nil, frame)
+				frame.trackbg:Point("TOPLEFT", _G[frame:GetName().."ScrollUpButton"], "BOTTOMLEFT", 0, -1)
+				frame.trackbg:Point("BOTTOMRIGHT", _G[frame:GetName().."ScrollDownButton"], "TOPRIGHT", 0, 1)
+				frame.trackbg:SetTemplate("Transparent")
+			end
+
+			if frame:GetThumbTexture() then
+				if not thumbTrim then thumbTrim = 3 end
+				frame:GetThumbTexture():SetTexture(nil)
+				if not frame.thumbbg then
+					frame.thumbbg = CreateFrame("Frame", nil, frame)
+					frame.thumbbg:Point("TOPLEFT", frame:GetThumbTexture(), "TOPLEFT", 2, -thumbTrim)
+					frame.thumbbg:Point("BOTTOMRIGHT", frame:GetThumbTexture(), "BOTTOMRIGHT", -2, thumbTrim)
+					frame.thumbbg:SetTemplate("Default", true, true)
+					frame.thumbbg.backdropTexture:SetVertexColor(0.6, 0.6, 0.6)
+					if frame.trackbg then
+						frame.thumbbg:SetFrameLevel(frame.trackbg:GetFrameLevel()+1)
+					end
+				end
+			end
+		end
+	else
+		if frame.Background then frame.Background:SetTexture(nil) end
+		if frame.trackBG then frame.trackBG:SetTexture(nil) end
+		if frame.Middle then frame.Middle:SetTexture(nil) end
+		if frame.Top then frame.Top:SetTexture(nil) end
+		if frame.Bottom then frame.Bottom:SetTexture(nil) end
+		if frame.ScrollBarTop then frame.ScrollBarTop:SetTexture(nil) end
+		if frame.ScrollBarBottom then frame.ScrollBarBottom:SetTexture(nil) end
+		if frame.ScrollBarMiddle then frame.ScrollBarMiddle:SetTexture(nil) end
+
+		if frame.ScrollUpButton and frame.ScrollDownButton then
+			if not frame.ScrollUpButton.icon then
+				S:HandleNextPrevButton2(frame.ScrollUpButton, true, true)
+				frame.ScrollUpButton:Size(frame.ScrollUpButton:GetWidth() + 7, frame.ScrollUpButton:GetHeight() + 7)
+			end
+
+			if not frame.ScrollDownButton.icon then
+				S:HandleNextPrevButton2(frame.ScrollDownButton, true)
+				frame.ScrollDownButton:Size(frame.ScrollDownButton:GetWidth() + 7, frame.ScrollDownButton:GetHeight() + 7)
+			end
+
+			if not frame.trackbg then
+				frame.trackbg = CreateFrame("Frame", nil, frame)
+				frame.trackbg:Point("TOPLEFT", frame.ScrollUpButton, "BOTTOMLEFT", 0, -1)
+				frame.trackbg:Point("BOTTOMRIGHT", frame.ScrollDownButton, "TOPRIGHT", 0, 1)
+				frame.trackbg:SetTemplate("Transparent")
+			end
+
+			if frame.thumbTexture then
+				if not thumbTrim then thumbTrim = 3 end
+				frame.thumbTexture:SetTexture(nil)
+				if not frame.thumbbg then
+					frame.thumbbg = CreateFrame("Frame", nil, frame)
+					frame.thumbbg:Point("TOPLEFT", frame.thumbTexture, "TOPLEFT", 2, -thumbTrim)
+					frame.thumbbg:Point("BOTTOMRIGHT", frame.thumbTexture, "BOTTOMRIGHT", -2, thumbTrim)
+					frame.thumbbg:SetTemplate("Default", true, true)
+					frame.thumbbg.backdropTexture:SetVertexColor(0.6, 0.6, 0.6)
+					if frame.trackbg then
+						frame.thumbbg:SetFrameLevel(frame.trackbg:GetFrameLevel()+1)
+					end
+				end
+			end
+		end
+	end
+end
+
 local tabs = {
 	"LeftDisabled",
 	"MiddleDisabled",
@@ -207,9 +316,9 @@ local tabs = {
 }
 
 function S:HandleTab(tab)
-	local name = tab:GetName()
+    if not tab then return end
 	for _, object in pairs(tabs) do
-		local tex = _G[name..object]
+		local tex = _G[tab:GetName()..object]
 		if tex then
 			tex:SetTexture(nil)
 		end
@@ -288,6 +397,103 @@ function S:HandleNextPrevButton(btn, arrowDir, color, noBackdrop, stipTexts)
 
 	btn.isSkinned = true
 end
+
+function S:HandleNextPrevButton2(btn, useVertical, inverseDirection)
+	inverseDirection = inverseDirection or btn:GetName() and (strfind(btn:GetName():lower(), 'left') or strfind(btn:GetName():lower(), 'prev') or strfind(btn:GetName():lower(), 'decrement') or strfind(btn:GetName():lower(), 'back'))
+
+	btn:StripTextures()
+	btn:SetNormalTexture(nil)
+	btn:SetPushedTexture(nil)
+	btn:SetHighlightTexture(nil)
+	btn:SetDisabledTexture(nil)
+
+	if not btn.icon then
+		btn.icon = btn:CreateTexture(nil, 'ARTWORK')
+		btn.icon:Size(13)
+		btn.icon:Point('CENTER')
+		btn.icon:SetTexture([[Interface\Buttons\SquareButtonTextures]])
+		btn.icon:SetTexCoord(0.01562500, 0.20312500, 0.01562500, 0.20312500)
+
+		btn:HookScript('OnMouseDown', function(self)
+			if self:IsEnabled() then
+				self.icon:Point("CENTER", -1, -1);
+			end
+		end)
+
+		btn:HookScript('OnMouseUp', function(self)
+			self.icon:Point("CENTER", 0, 0);
+		end)
+
+		btn:HookScript('OnDisable', function(self)
+			SetDesaturation(self.icon, true);
+			self.icon:SetAlpha(0.5);
+		end)
+
+		btn:HookScript('OnEnable', function(self)
+			SetDesaturation(self.icon, false);
+			self.icon:SetAlpha(1.0);
+		end)
+
+		if not btn:IsEnabled() then
+			btn:GetScript('OnDisable')(btn)
+		end
+	end
+
+	if useVertical then
+		if inverseDirection then
+			SquareButton_SetIcon(btn, 'UP')
+		else
+			SquareButton_SetIcon(btn, 'DOWN')
+		end
+	else
+		if inverseDirection then
+			SquareButton_SetIcon(btn, 'LEFT')
+		else
+			SquareButton_SetIcon(btn, 'RIGHT')
+		end
+	end
+
+	S:HandleButton(btn)
+	btn:Size(btn:GetWidth() - 7, btn:GetHeight() - 7)
+end
+
+-- Introduced in 7.3
+function S:HandleMaxMinFrame(frame)
+	if ( not frame) then
+        return
+    end
+
+	frame:StripTextures()
+
+	for _, name in next, {"MaximizeButton", "MinimizeButton"} do
+		local button = frame[name]
+		if button then
+			button:SetSize(18, 18)
+			button:ClearAllPoints()
+			button:SetPoint("CENTER")
+
+			button:SetNormalTexture("Interface\\AddOns\\ElvUI\\media\\textures\\vehicleexit")
+			button:SetPushedTexture("Interface\\AddOns\\ElvUI\\media\\textures\\vehicleexit")
+			button:SetHighlightTexture("Interface\\AddOns\\ElvUI\\media\\textures\\vehicleexit")
+
+			if not button.backdrop then
+				button:CreateBackdrop("Default", true)
+				button.backdrop:Point("TOPLEFT", button, 1, -1)
+				button.backdrop:Point("BOTTOMRIGHT", button, -1, 1)
+				button:HookScript('OnEnter', S.SetModifiedBackdrop)
+				button:HookScript('OnLeave', S.SetOriginalBackdrop)
+				button:SetHitRectInsets(1, 1, 1, 1)
+			end
+
+			if name == "MaximizeButton" then
+				button:GetNormalTexture():SetTexCoord(1, 1, 1, -1.2246467991474e-016, 1.1102230246252e-016, 1, 0, -1.144237745222e-017)
+				button:GetPushedTexture():SetTexCoord(1, 1, 1, -1.2246467991474e-016, 1.1102230246252e-016, 1, 0, -1.144237745222e-017)
+				button:GetHighlightTexture():SetTexCoord(1, 1, 1, -1.2246467991474e-016, 1.1102230246252e-016, 1, 0, -1.144237745222e-017)
+			end
+		end
+	end
+end
+
 
 function S:HandleRotateButton(btn)
 	btn:SetTemplate()

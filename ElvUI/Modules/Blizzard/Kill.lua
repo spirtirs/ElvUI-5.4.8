@@ -5,7 +5,7 @@ function B:KillBlizzard()
 	HelpOpenTicketButtonTutorial:Kill()
 	HelpPlate:Kill()
 	HelpPlateTooltip:Kill()
-	CompanionsMicroButtonAlert:Kill()
+	CollectionsMicroButtonAlert:Kill()
 
 	Advanced_UIScaleSlider:Kill()
 	Advanced_UseUIScale:Kill()
