@@ -2293,38 +2293,5 @@ end
 local function InitializeCallback()
 	CH:Initialize()
 end
-function AddFactionIconToChatMessage(arg9, arg12, pflag)
-    if (arg9 and strlen(arg9) > 0 and strlen(pflag) == 0 and arg12 and strlen(arg12) > 0) then
-        local channelName = strlower(arg9);
-        
-        if (channelName == "world" or channelName == "world_ru" or channelName == "english" or
-            channelName == "world_en" or channelName == "world_cn" or channelName == "world_es") then
-            local race, _, playerName = select(4, GetPlayerInfoByGUID(arg12));
-            
-            if (playerName and strlen(playerName) > 0) then
-                local selectedIcon = CHANNEL_ICON_NONE;
-                
-                if (race == "Pandaren") then
-                    selectedIcon = CHANNEL_ICON_NEUTRAL;
-                elseif (allianceRaces[race]) then
-                    selectedIcon = CHANNEL_ICON_ALLIANCE;
-                elseif (hordeRaces[race]) then
-                    selectedIcon = CHANNEL_ICON_HORDE;
-                else
-                    selectedIcon = CHANNEL_ICON_NONE;
-                end
-                
-                if (selectedIcon == CHANNEL_ICON_ALLIANCE) then
-                    pflag = "|TInterface\\Timer\\alliance-logo:18|t";
-                elseif (selectedIcon == CHANNEL_ICON_HORDE) then
-                    pflag = "|TInterface\\Timer\\horde-logo:18|t";
-                elseif (selectedIcon == CHANNEL_ICON_NEUTRAL) then
-                    pflag = "|TInterface\\Timer\\panda-logo:12|t";
-                end
-            end
-        end
-    end
-    return pflag
-end
 
 E:RegisterModule(CH:GetName(), InitializeCallback)
