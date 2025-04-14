@@ -1289,9 +1289,9 @@ if (arg9 and strlen(arg9) > 0 and strlen(pflag) == 0 and arg12 and strlen(arg12)
             end
 
             if (selectedIcon == CHANNEL_ICON_ALLIANCE) then
-                pflag = "|TInterface\\Timer\\alliance-logo:18|t"
+                pflag = "|TInterface\\Timer\\alliance-logo:14:14:-1:0:64:64:14:50:4:60|t"
             elseif (selectedIcon == CHANNEL_ICON_HORDE) then
-                pflag = "|TInterface\\Timer\\horde-logo:18|t"
+                pflag = "|TInterface\\Timer\\horde-logo:14:14:-1:0:64:64:14:50:4:60|t"
             elseif (selectedIcon == CHANNEL_ICON_NEUTRAL) then
                 pflag = " |TInterface\\Timer\\panda-logo:12|t "
             end
