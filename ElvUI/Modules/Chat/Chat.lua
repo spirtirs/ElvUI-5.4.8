@@ -1231,20 +1231,20 @@ if arg6 ~= "" then
 
         -- Добавляем иконку Blizzard, это было отправлено GM
         pflag = "|TInterface\\ChatFrame\\UI-ChatIcon-Blizz:12:20:0:0:32:16:4:28:0:16|t "
-    elseif arg6 == "DEV" then
+    	elseif arg6 == "DEV" then
         -- Добавляем иконку Blizzard, это было отправлено разработчиком
         pflag = "|TInterface\\ChatFrame\\UI-ChatIcon-Blizz:12:20:0:0:32:16:4:28:0:16|t "
-    elseif arg6 == "DND" or arg6 == "AFK" then
+    	elseif arg6 == "DND" or arg6 == "AFK" then
         pflag = (pflag or "").._G["CHAT_FLAG_"..arg6]
-    else
+    	else
         pflag = _G["CHAT_FLAG_"..arg6]
     end
 else
-    if pflag == true then
+   		 if pflag == true then
         pflag = ""
     end
 
-    if lfgRoles[arg2] and (chatType == "PARTY_LEADER" or chatType == "PARTY" or chatType == "RAID" or chatType == "RAID_LEADER" or chatType == "INSTANCE_CHAT" or chatType == "INSTANCE_CHAT_LEADER") then
+    	if lfgRoles[arg2] and (chatType == "PARTY_LEADER" or chatType == "PARTY" or chatType == "RAID" or chatType == "RAID_LEADER" or chatType == "INSTANCE_CHAT" or chatType == "INSTANCE_CHAT_LEADER") then
         pflag = lfgRoles[arg2]..(pflag or "")
     end
 end
@@ -2292,6 +2292,44 @@ end
 
 local function InitializeCallback()
 	CH:Initialize()
+end
+local function AddItemIcon(self, event, message, ...)
+    for link, itemName in string.gmatch(message, "|Hitem:(%d+):%d+:%d+:%d+:%d+:%d+:%d+:%d+:%d+:%d+:%d+|h%[([^%]]+)%]|h") do
+        local _, _, _, _, _, _, _, _, _, itemIcon = GetItemInfo(link)
+        if itemIcon then
+            local iconLink = "|T" .. itemIcon .. ":13:13:-4:0:64:64:5:59:5:59|t"
+            local itemLink = "|Hitem:" .. link .. ":0:0:0:0:0:0:0:0:0:0:0|h[" .. itemName .. "]|h"
+            message = string.gsub(message, "|Hitem:" .. link .. ":.-|h%[([^%]]+)%]|h", iconLink .. itemLink)
+        end
+    end
+
+    return false, message, ...
+end
+
+local channels = {
+    "CHAT_MSG_YELL",
+    "CHAT_MSG_WHISPER",
+    "CHAT_MSG_OFFICER",
+    "CHAT_MSG_SAY",
+    "CHAT_MSG_GUILD",
+    "CHAT_MSG_PARTY",
+    "CHAT_MSG_PARTY_LEADER",
+    "CHAT_MSG_RAID",
+    "CHAT_MSG_RAID_LEADER",
+    "CHAT_MSG_INSTANCE_CHAT",
+    "CHAT_MSG_INSTANCE_CHAT_LEADER",
+    "CHAT_MSG_CHANNEL",
+    "CHAT_MSG_WHISPER_INFORM",
+    "CHAT_MSG_LOOT",
+    "CHAT_MSG_SKILL",
+    "CHAT_MSG_CURRENCY",
+    "CHAT_MSG_BATTLEGROUND",
+    "CHAT_MSG_SYSTEM",
+    "CHAT_MSG_RAID_WARNING"
+}
+
+for _, channel in ipairs(channels) do
+    ChatFrame_AddMessageEventFilter(channel, AddItemIcon)
 end
 
 E:RegisterModule(CH:GetName(), InitializeCallback)
