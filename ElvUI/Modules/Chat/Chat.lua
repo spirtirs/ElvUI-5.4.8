@@ -1220,85 +1220,92 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 				--fontHeight will be 0 if it's still at the default (14)
 				fontHeight = 14
 			end
-
 			-- Add AFK/DND flags
-local pflag = GetChatIcons(arg2)
+			local pflag = GetChatIcons(arg2)
 
-if arg6 ~= "" then
-    if arg6 == "GM" then
-        -- Если это было шептание, передаём в аддон GMChat.
-        if chatType == "WHISPER" then return end
-
-        -- Добавляем иконку Blizzard, это было отправлено GM
-        pflag = "|TInterface\\ChatFrame\\UI-ChatIcon-Blizz:12:20:0:0:32:16:4:28:0:16|t "
-    	elseif arg6 == "DEV" then
-        -- Добавляем иконку Blizzard, это было отправлено разработчиком
-        pflag = "|TInterface\\ChatFrame\\UI-ChatIcon-Blizz:12:20:0:0:32:16:4:28:0:16|t "
-    	elseif arg6 == "DND" or arg6 == "AFK" then
-        pflag = (pflag or "").._G["CHAT_FLAG_"..arg6]
-    	else
-        pflag = _G["CHAT_FLAG_"..arg6]
-    end
-else
-   		 if pflag == true then
-        pflag = ""
-    end
-
-    	if lfgRoles[arg2] and (chatType == "PARTY_LEADER" or chatType == "PARTY" or chatType == "RAID" or chatType == "RAID_LEADER" or chatType == "INSTANCE_CHAT" or chatType == "INSTANCE_CHAT_LEADER") then
-        pflag = lfgRoles[arg2]..(pflag or "")
-    end
-end
-
-pflag = pflag or ""
-
-if chatType == "WHISPER_INFORM" and GMChatFrame_IsGM and GMChatFrame_IsGM(arg2) then return end
-
-local showLink = 1
-if strsub(chatType, 1, 7) == "MONSTER" or strsub(chatType, 1, 9) == "RAID_BOSS" then
-    showLink = nil
-else
-    arg1 = gsub(arg1, "%%", "%%%%")
-end
-
--- Интеграция нового кода для иконок каналов
-if (arg9 and strlen(arg9) > 0 and strlen(pflag) == 0 and arg12 and strlen(arg12) > 0) then
-    local channelName = strlower(arg9)
-
-    if (channelName == "world" or channelName == "world_ru" or channelName == "english" or
-        channelName == "world_en" or channelName == "world_cn" or channelName == "world_es") then
-        local race, _, playerName = select(4, GetPlayerInfoByGUID(arg12))
-
-        if (playerName and strlen(playerName) > 0) then
-            local faction = UnitFactionGroup(playerName)
-            local selectedIcon = CHANNEL_ICON_NONE
-
-            if (faction == "Alliance") then
-                selectedIcon = CHANNEL_ICON_ALLIANCE
-            elseif (faction == "Horde") then
-                selectedIcon = CHANNEL_ICON_HORDE
-            elseif (faction == "Neutral") then
-                selectedIcon = CHANNEL_ICON_NONE
-            else
-                if (race == "Pandaren") then
-                    selectedIcon = CHANNEL_ICON_NEUTRAL -- TODO
-                elseif (race == "Human" or race == "Dwarf" or race == "NightElf" or race == "Gnome" or race == "Draenei" or race == "Worgen" or race == "WorgenAlt") then
-                    selectedIcon = CHANNEL_ICON_ALLIANCE
-                else
-                    selectedIcon = CHANNEL_ICON_HORDE
-                end
-            end
-
-            if (selectedIcon == CHANNEL_ICON_ALLIANCE) then
-                pflag = "|TInterface\\Timer\\alliance-logo:14:14:-1:0:64:64:14:50:4:60|t"
-            elseif (selectedIcon == CHANNEL_ICON_HORDE) then
-                pflag = "|TInterface\\Timer\\horde-logo:14:14:-1:0:64:64:14:50:4:60|t"
-            elseif (selectedIcon == CHANNEL_ICON_NEUTRAL) then
-                pflag = " |TInterface\\Timer\\panda-logo:12|t "
-            end
-        end
-    end
-end
-
+			if arg6 ~= "" then
+				if arg6 == "GM" then
+					-- Если это было шептание, передаём в аддон GMChat.
+					if chatType == "WHISPER" then
+						return
+					end
+			
+					-- Добавляем иконку Blizzard, это было отправлено GM
+					pflag = "|TInterface\\ChatFrame\\UI-ChatIcon-Blizz:12:20:0:0:32:16:4:28:0:16|t "
+			
+				elseif arg6 == "DEV" then
+					-- Добавляем иконку Blizzard, это было отправлено разработчиком
+					pflag = "|TInterface\\ChatFrame\\UI-ChatIcon-Blizz:12:20:0:0:32:16:4:28:0:16|t "
+			
+				elseif arg6 == "DND" or arg6 == "AFK" then
+					pflag = (pflag or "") .. _G["CHAT_FLAG_" .. arg6]
+			
+				else
+					pflag = _G["CHAT_FLAG_" .. arg6]
+				end
+			
+			else
+				if pflag == true then
+					pflag = ""
+				end
+			
+				if lfgRoles[arg2] and (chatType == "PARTY_LEADER" or chatType == "PARTY" or chatType == "RAID" or chatType == "RAID_LEADER" or chatType == "INSTANCE_CHAT" or chatType == "INSTANCE_CHAT_LEADER") then
+					pflag = lfgRoles[arg2] .. (pflag or "")
+				end
+			end
+			
+			pflag = pflag or ""
+			
+			if chatType == "WHISPER_INFORM" and GMChatFrame_IsGM and GMChatFrame_IsGM(arg2) then
+				return
+			end
+			
+			local showLink = 1
+			if strsub(chatType, 1, 7) == "MONSTER" or strsub(chatType, 1, 9) == "RAID_BOSS" then
+				showLink = nil
+			else
+				arg1 = gsub(arg1, "%%", "%%%%")
+			end
+			
+			-- Интеграция нового кода для иконок каналов
+			if (arg9 and strlen(arg9) > 0 and strlen(pflag) == 0 and arg12 and strlen(arg12) > 0) then
+				local channelName = strlower(arg9)
+			
+				if (channelName == "world" or channelName == "world_ru" or channelName == "english" or
+					channelName == "world_en" or channelName == "world_cn" or channelName == "world_es") then
+			
+					local race, _, playerName = select(4, GetPlayerInfoByGUID(arg12))
+			
+					if (playerName and strlen(playerName) > 0) then
+						local faction = UnitFactionGroup(playerName)
+						local selectedIcon = CHANNEL_ICON_NONE
+			
+						if (faction == "Alliance") then
+							selectedIcon = CHANNEL_ICON_ALLIANCE
+						elseif (faction == "Horde") then
+							selectedIcon = CHANNEL_ICON_HORDE
+						elseif (faction == "Neutral") then
+							selectedIcon = CHANNEL_ICON_NONE
+						else
+							if (race == "Pandaren") then
+								selectedIcon = CHANNEL_ICON_NEUTRAL -- TODO
+							elseif (race == "Human" or race == "Dwarf" or race == "NightElf" or race == "Gnome" or race == "Draenei" or race == "Worgen" or race == "WorgenAlt") then
+								selectedIcon = CHANNEL_ICON_ALLIANCE
+							else
+								selectedIcon = CHANNEL_ICON_HORDE
+							end
+						end
+			
+						if (selectedIcon == CHANNEL_ICON_ALLIANCE) then
+							pflag = "|TInterface\\Timer\\alliance-logo:14:14:-1:0:64:64:14:50:4:60|t"
+						elseif (selectedIcon == CHANNEL_ICON_HORDE) then
+							pflag = "|TInterface\\Timer\\horde-logo:14:14:-1:0:64:64:14:50:4:60|t"
+						elseif (selectedIcon == CHANNEL_ICON_NEUTRAL) then
+							pflag = " |TInterface\\Timer\\panda-logo:12|t "
+						end
+					end
+				end
+			end
 			-- Search for icon links and replace them with texture links.
 			local term
 			for tag in gmatch(arg1, "%b{}") do
