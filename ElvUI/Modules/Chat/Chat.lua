@@ -2295,9 +2295,9 @@ local function InitializeCallback()
 end
 local function AddItemIcon(self, event, message, ...)
     for link, itemName in string.gmatch(message, "|Hitem:(%d+):%d+:%d+:%d+:%d+:%d+:%d+:%d+:%d+:%d+:%d+|h%[([^%]]+)%]|h") do
-        local _, _, _, _, _, _, _, _, _, itemIcon = GetItemInfo(link)
+         local _, _, _, _, _, _, _, _, _, itemIcon = GetItemInfo(link)
         if itemIcon then
-            local iconLink = "|T" .. itemIcon .. ":13:13:-4:0:64:64:5:59:5:59|t"
+            local iconLink = "|T" .. itemIcon .. ":13:13:-6:0:64:64:5:59:5:59|t"
             local itemLink = "|Hitem:" .. link .. ":0:0:0:0:0:0:0:0:0:0:0|h[" .. itemName .. "]|h"
             message = string.gsub(message, "|Hitem:" .. link .. ":.-|h%[([^%]]+)%]|h", iconLink .. itemLink)
         end
