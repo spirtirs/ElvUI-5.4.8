@@ -154,7 +154,8 @@ E.Media = {
 		Expressway = M..[[Fonts\Expressway.ttf]],
 		Homespun = M..[[Fonts\Homespun.ttf]],
 		Invisible = M..[[Fonts\Invisible.ttf]],
-		PTSansNarrow = M..[[Fonts\PTSansNarrow.ttf]]
+		PTSansNarrow = M..[[Fonts\PTSansNarrow.ttf]],
+		SFProDisplay = M..[[Fonts\SFProDisplay.ttf]]
 	},
 	MailIcons = {
 		Mail0 = M..[[MailIcons\Mail0.tga]],
@@ -243,6 +244,7 @@ LSM:Register("font", "Continuum Medium", E.Media.Fonts.ContinuumMedium)
 LSM:Register("font", "Die Die Die!", E.Media.Fonts.DieDieDie, LSM.LOCALE_BIT_ruRU + LSM.LOCALE_BIT_western)
 LSM:Register("font", "Action Man", E.Media.Fonts.ActionMan)
 LSM:Register("font", "Expressway", E.Media.Fonts.Expressway, LSM.LOCALE_BIT_ruRU + LSM.LOCALE_BIT_western)
+LSM:Register("font", "SFProDisplay", E.Media.Fonts.SFProDisplay, LSM.LOCALE_BIT_ruRU + LSM.LOCALE_BIT_western)
 LSM:Register("font", "PT Sans Narrow", E.Media.Fonts.PTSansNarrow, LSM.LOCALE_BIT_ruRU + LSM.LOCALE_BIT_western)
 LSM:Register("font", "Homespun", E.Media.Fonts.Homespun, LSM.LOCALE_BIT_ruRU + LSM.LOCALE_BIT_western)
 LSM:Register("sound", "ElvUI Aska", E.Media.Sounds.ElvUIAska)
