@@ -252,7 +252,7 @@ function DT:LoadDataTexts()
 	local isInPVP = inInstance and (instanceType == "pvp")
 	local pointIndex, isBGPanel, enableBGPanel
 
-	if ElvConfigToggle then
+	if ElvConfigToggle and ElvConfigToggle.text then
 		ElvConfigToggle.text:FontTemplate(fontTemplate, self.db.fontSize, self.db.fontOutline)
 	end
 
@@ -263,41 +263,47 @@ function DT:LoadDataTexts()
 		--Restore Panels
 		for i = 1, panel.numPoints do
 			pointIndex = DT.PointLocation[i]
-			panel.dataPanels[pointIndex]:UnregisterAllEvents()
-			panel.dataPanels[pointIndex]:SetScript("OnUpdate", nil)
-			panel.dataPanels[pointIndex]:SetScript("OnEnter", nil)
-			panel.dataPanels[pointIndex]:SetScript("OnLeave", nil)
-			panel.dataPanels[pointIndex]:SetScript("OnClick", nil)
-			panel.dataPanels[pointIndex].text:FontTemplate(fontTemplate, self.db.fontSize, self.db.fontOutline)
-			panel.dataPanels[pointIndex].text:SetWordWrap(self.db.wordWrap)
-			panel.dataPanels[pointIndex].text:SetText(nil)
-			panel.dataPanels[pointIndex].pointIndex = pointIndex
-
-			if enableBGPanel then
-				panel.dataPanels[pointIndex]:RegisterEvent("UPDATE_BATTLEFIELD_SCORE")
-				panel.dataPanels[pointIndex]:RegisterEvent("PLAYER_REGEN_ENABLED")
-				panel.dataPanels[pointIndex]:SetScript("OnEvent", DT.UPDATE_BATTLEFIELD_SCORE)
-				panel.dataPanels[pointIndex]:SetScript("OnEnter", DT.BattlegroundStats)
-				panel.dataPanels[pointIndex]:SetScript("OnLeave", DT.Data_OnLeave)
-				panel.dataPanels[pointIndex]:SetScript("OnClick", DT.HideBattlegroundTexts)
-				DT.UPDATE_BATTLEFIELD_SCORE(panel.dataPanels[pointIndex])
-				DT.ShowingBGStats = true
-			else
-				-- we aren't showing BGStats anymore
-				if (isBGPanel or not isInPVP) and DT.ShowingBGStats then
-					DT.ShowingBGStats = nil
+			if panel.dataPanels[pointIndex] then
+				panel.dataPanels[pointIndex]:UnregisterAllEvents()
+				panel.dataPanels[pointIndex]:SetScript("OnUpdate", nil)
+				panel.dataPanels[pointIndex]:SetScript("OnEnter", nil)
+				panel.dataPanels[pointIndex]:SetScript("OnLeave", nil)
+				panel.dataPanels[pointIndex]:SetScript("OnClick", nil)
+				
+				if panel.dataPanels[pointIndex].text then
+					panel.dataPanels[pointIndex].text:FontTemplate(fontTemplate, self.db.fontSize, self.db.fontOutline)
+					panel.dataPanels[pointIndex].text:SetWordWrap(self.db.wordWrap)
+					panel.dataPanels[pointIndex].text:SetText(nil)
 				end
+				
+				panel.dataPanels[pointIndex].pointIndex = pointIndex
 
-				--Register Panel to Datatext
-				for name, data in pairs(DT.RegisteredDataTexts) do
-					for option, value in pairs(self.db.panels) do
-						if value and type(value) == "table" then
-							if option == panelName and self.db.panels[option][pointIndex] and self.db.panels[option][pointIndex] == name then
-								DT:AssignPanelToDataText(panel.dataPanels[pointIndex], data)
-							end
-						elseif value and type(value) == "string" and value == name then
-							if self.db.panels[option] == name and option == panelName then
-								DT:AssignPanelToDataText(panel.dataPanels[pointIndex], data)
+				if enableBGPanel then
+					panel.dataPanels[pointIndex]:RegisterEvent("UPDATE_BATTLEFIELD_SCORE")
+					panel.dataPanels[pointIndex]:RegisterEvent("PLAYER_REGEN_ENABLED")
+					panel.dataPanels[pointIndex]:SetScript("OnEvent", DT.UPDATE_BATTLEFIELD_SCORE)
+					panel.dataPanels[pointIndex]:SetScript("OnEnter", DT.BattlegroundStats)
+					panel.dataPanels[pointIndex]:SetScript("OnLeave", DT.Data_OnLeave)
+					panel.dataPanels[pointIndex]:SetScript("OnClick", DT.HideBattlegroundTexts)
+					DT.UPDATE_BATTLEFIELD_SCORE(panel.dataPanels[pointIndex])
+					DT.ShowingBGStats = true
+				else
+					-- we aren't showing BGStats anymore
+					if (isBGPanel or not isInPVP) and DT.ShowingBGStats then
+						DT.ShowingBGStats = nil
+					end
+
+					--Register Panel to Datatext
+					for name, data in pairs(DT.RegisteredDataTexts) do
+						for option, value in pairs(self.db.panels) do
+							if value and type(value) == "table" then
+								if option == panelName and self.db.panels[option][pointIndex] and self.db.panels[option][pointIndex] == name then
+									DT:AssignPanelToDataText(panel.dataPanels[pointIndex], data)
+								end
+							elseif value and type(value) == "string" and value == name then
+								if self.db.panels[option] == name and option == panelName then
+									DT:AssignPanelToDataText(panel.dataPanels[pointIndex], data)
+								end
 							end
 						end
 					end

@@ -17,6 +17,9 @@ local NUM_LE_RAID_BUFF_TYPES = NUM_LE_RAID_BUFF_TYPES
 local Masque = E.Libs.Masque
 local MasqueGroup = Masque and Masque:Group("ElvUI", "Consolidated Buffs")
 
+-- Initialize default width if not set
+E.ConsolidatedBuffsWidth = E.ConsolidatedBuffsWidth or 150
+
 local ignoreIcons = {}
 
 A.DefaultIcons = {
@@ -222,7 +225,7 @@ function A:Update_ConsolidatedBuffsSettings(isCallback)
 		end
 	end
 
-	frame:SetWidth(E.ConsolidatedBuffsWidth)
+	frame:SetWidth(E.ConsolidatedBuffsWidth or 150)
 
 	-- Buttons
 	for i = 1, NUM_LE_RAID_BUFF_TYPES do
@@ -302,7 +305,7 @@ end
 
 function A:Construct_ConsolidatedBuffs()
 	local frame = CreateFrame("Frame", "ElvUI_ConsolidatedBuffs", Minimap)
-	frame:SetWidth(E.ConsolidatedBuffsWidth)
+	frame:SetWidth(E.ConsolidatedBuffsWidth or 150)
 	if E.db.auras.consolidatedBuffs.position == "LEFT" then
 		frame:SetPoint("TOPRIGHT", Minimap.backdrop, "TOPLEFT", E.Border - E.Spacing * 3, 0)
 		frame:SetPoint("BOTTOMRIGHT", Minimap.backdrop, "BOTTOMLEFT", E.Border - E.Spacing * 3, 0)

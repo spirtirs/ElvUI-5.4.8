@@ -1,5 +1,12 @@
 local _G = _G
 local gsub, type = gsub, type
+local pairs, ipairs = pairs, ipairs
+local select, unpack = select, unpack
+local format, strfind = format, strfind
+local floor, ceil = floor, ceil
+local min, max = min, max
+local tremove, tinsert = tremove, tinsert
+local wipe = wipe
 
 local CreateFrame = CreateFrame
 local GetAddOnMetadata = GetAddOnMetadata
@@ -115,12 +122,32 @@ do
 end
 
 do
-	local a1, a2, a3 = "","([%(%)%.%%%+%-%*%?%[%^%$])","%%%1"
-	function E:EscapeString(s) return gsub(s, a2, a3) end
+	local escapePattern = "([%(%)%.%%%+%-%*%?%[%^%$])"
+	local escapeReplace = "%%%1"
+	local escapeCache = {}
+	
+	function E:EscapeString(s)
+		if not s then return "" end
+		if escapeCache[s] then return escapeCache[s] end
+		local result = gsub(s, escapePattern, escapeReplace)
+		escapeCache[s] = result
+		return result
+	end
 
-	local a4, a5, a6, a7 = "|c[fF][fF]%x%x%x%x%x%x","|r","|T.-|t","^%s*"
+	local stripPatterns = {
+		"|c[fF][fF]%x%x%x%x%x%x",
+		"|r",
+		"|T.-|t",
+		"^%s*"
+	}
+	
 	function E:StripString(s)
-		return gsub(gsub(gsub(gsub(s, a4, a1), a5, a1), a6, a1), a7, a1)
+		if not s then return "" end
+		local result = s
+		for _, pattern in ipairs(stripPatterns) do
+			result = gsub(result, pattern, "")
+		end
+		return result
 	end
 end
 
@@ -168,7 +195,7 @@ function E:OnInitialize()
 	end
 
 	E.ScanTooltip = CreateFrame("GameTooltip", "ElvUI_ScanTooltip", UIParent, "GameTooltipTemplate")
-	E.PixelMode = E.twoPixelsPlease or E.private.general.pixelPerfect -- keep this over `UIScale`
+	E.PixelMode = E.twoPixelsPlease or E.private.general.pixelPerfect
 	E:UIScale(true)
 	E:UpdateMedia()
 	E:Contruct_StaticPopups()

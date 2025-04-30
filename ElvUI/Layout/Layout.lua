@@ -418,7 +418,7 @@ function LO:CreateMinimapPanels()
 		configtoggle:Point("BOTTOMLEFT", rminipanel, "BOTTOMRIGHT", (E.PixelMode and -1 or 1), 0)
 	end
 	configtoggle:RegisterForClicks("AnyUp")
-	configtoggle:Width(E.ConsolidatedBuffsWidth - (E.Border*2))
+	configtoggle:Width((E.ConsolidatedBuffsWidth or 150) - (E.Border*2))
 	configtoggle:SetTemplate(E.db.datatexts.panelTransparency and "Transparent" or "Default", true)
 	configtoggle.text = configtoggle:CreateFontString(nil, "OVERLAY")
 	configtoggle.text:FontTemplate(E.Libs.LSM:Fetch("font", E.db.datatexts.font), E.db.datatexts.fontSize, E.db.datatexts.fontOutline)
