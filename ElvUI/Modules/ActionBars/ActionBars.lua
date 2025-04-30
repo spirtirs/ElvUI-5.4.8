@@ -836,9 +836,9 @@ function AB:DisableBlizzard()
 	AB:SecureHook("BlizzardOptionsPanel_OnEvent")
 
 	if PlayerTalentFrame then
-		PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+		PlayerTalentFrame:UnregisterEvent("PLAYER_SPECIALIZATION_CHANGED")
 	else
-		hooksecurefunc("TalentFrame_LoadUI", function() PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED") end)
+		hooksecurefunc("TalentFrame_LoadUI", function() PlayerTalentFrame:UnregisterEvent("PLAYER_SPECIALIZATION_CHANGED") end)
 	end
 end
 

@@ -2,10 +2,13 @@ local E, L, V, P, G = unpack(select(2, ...))
 local NP = E:GetModule("NamePlates")
 
 function NP:Update_PvPRole(frame)
-	if not frame.UnitType == "ENEMY_PLAYER" or not frame.UnitType == "FRIENDLY_PLAYER" then return end
+	if not frame.UnitType or (frame.UnitType ~= "ENEMY_PLAYER" and frame.UnitType ~= "FRIENDLY_PLAYER") then return end
 
-	local db = self.db.units[frame.UnitType].pvpRole
+	local db = self.db and self.db.units and self.db.units[frame.UnitType] and self.db.units[frame.UnitType].pvpRole
+	if not db then return end
+
 	local icon = frame.PvPRole
+	if not icon then return end
 
 	if self.Healers[frame.UnitName] or self.Tanks[frame.UnitName] then
 		icon:ClearAllPoints()

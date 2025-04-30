@@ -92,12 +92,7 @@ function E:CheckTalentTree(tree)
 end
 
 function E:GetPlayerRole()
-	local assignedRole = UnitGroupRolesAssigned("player")
-	if assignedRole == "NONE" then
-		return E.myspec and GetSpecializationRole(E.myspec)
-	end
-
-	return assignedRole
+	return E.myspec and GetSpecializationRole(E.myspec) or "NONE"
 end
 
 function E:CheckRole()
@@ -105,34 +100,43 @@ function E:CheckRole()
 	E.myrole = E:GetPlayerRole()
 
 	local role
-	if type(E.ClassRole[E.myclass]) == "string" then
-		role = E.ClassRole[E.myclass]
-	elseif E.myspec then
-		role = E.ClassRole[E.myclass][E.myspec]
-	end
-
-	local resilience = GetCombatRatingBonus(COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN)
-	local isInPvPGear = resilience > GetDodgeChance() and resilience > GetParryChance() and E.mylevel == MAX_PLAYER_LEVEL
-	if role == "Tank" and isInPvPGear then
-		role = "Melee"
+	if E.myspec then
+		role = GetSpecializationRole(E.myspec)
 	end
 
 	if not role then
 		local playerInt = select(2, UnitStat("player", 4))
-		local playerAgi	= select(2, UnitStat("player", 2))
+		local playerAgi = select(2, UnitStat("player", 2))
 		local base, posBuff, negBuff = UnitAttackPower("player")
 		local playerAp = base + posBuff + negBuff
 
-		role = ((playerAp > playerInt) or (playerAgi > playerInt)) and "Melee" or "Caster"
+		role = ((playerAp > playerInt) or (playerAgi > playerInt)) and "DAMAGER" or "HEALER"
 	end
 
 	if E.role ~= role then
 		E.role = role
 		E.callbacks:Fire("RoleChanged")
+		
+		if UnitGroupRolesAssigned("player") ~= role then
+			UnitSetRole("player", role)
+		end
 	end
 
 	if E.HealingClasses[E.myclass] ~= nil and E.myclass ~= "PRIEST" then
 		E.DispelClasses[E.myclass].Magic = E:CheckTalentTree(E.HealingClasses[E.myclass])
+	end
+end
+
+function E:StartRoleCheck()
+	if not self.roleCheckTimer then
+		self.roleCheckTimer = self:ScheduleRepeatingTimer("CheckRole", 1)
+	end
+end
+
+function E:StopRoleCheck()
+	if self.roleCheckTimer then
+		self:CancelTimer(self.roleCheckTimer)
+		self.roleCheckTimer = nil
 	end
 end
 
@@ -468,8 +472,19 @@ function E:PLAYER_LEVEL_UP(_, level)
 	E.mylevel = level
 end
 
+function E:PLAYER_SPECIALIZATION_CHANGED(unit)
+	if unit ~= "player" then return end
+	print("ElvUI Debug: PLAYER_SPECIALIZATION_CHANGED event triggered")
+	self:CheckRole()
+end
+
+function E:PLAYER_TALENT_UPDATE()
+	self:CheckRole()
+end
+
 function E:LoadAPI()
 	self:ScheduleTimer("CheckRole", 0.01)
+	self:StartRoleCheck()
 
 	E:RegisterEvent("PLAYER_LEVEL_UP")
 	E:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -478,7 +493,9 @@ function E:LoadAPI()
 	E:RegisterEvent("NEUTRAL_FACTION_SELECT_RESULT")
 	E:RegisterEvent("PET_BATTLE_CLOSE", "AddNonPetBattleFrames")
 	E:RegisterEvent("PET_BATTLE_OPENING_START", "RemoveNonPetBattleFrames")
-	E:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", "CheckRole")
+	E:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", "PLAYER_SPECIALIZATION_CHANGED")
+	E:RegisterEvent("PLAYER_TALENT_UPDATE", "PLAYER_TALENT_UPDATE")
+	E:RegisterEvent("PLAYER_ROLES_ASSIGNED", "CheckRole")
 	E:RegisterEvent("UNIT_ENTERED_VEHICLE", "EnterVehicleHideFrames")
 	E:RegisterEvent("UNIT_EXITED_VEHICLE", "ExitVehicleShowFrames")
 	E:RegisterEvent("UI_SCALE_CHANGED", "PixelScaleChanged")

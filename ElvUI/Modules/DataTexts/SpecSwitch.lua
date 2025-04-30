@@ -14,6 +14,7 @@ local IsShiftKeyDown = IsShiftKeyDown
 local SetLootSpecialization = SetLootSpecialization
 local SetActiveSpecGroup = SetActiveSpecGroup
 local ShowUIPanel = ShowUIPanel
+local GetActiveSpecGroup = GetActiveSpecGroup
 
 local LOOT = LOOT
 local SELECT_LOOT_SPECIALIZATION = SELECT_LOOT_SPECIALIZATION
@@ -39,15 +40,14 @@ local menuList = {
 
 local function OnEvent(self)
 	lastPanel = self
-
+	
+	active = GetActiveSpecGroup()
 	local specIndex = GetSpecialization()
 
 	if not specIndex then
 		self.text:SetText("N/A")
 		return
 	end
-
-	active = specIndex
 
 	local spec, loot, text = "", "N/A", LOOT
 	local specialization = GetLootSpecialization()
@@ -78,8 +78,9 @@ end
 local function OnEnter(self)
 	DT:SetupTooltip(self)
 
-	for i = 1, GetNumSpecializations() do
-		local _, name, _, icon = GetSpecializationInfo(i)
+		for i = 1, GetNumSpecGroups() do
+			local specIndex = GetSpecialization(false, false, i)
+			local _, name, _, icon = GetSpecializationInfo(specIndex)
 		if name then
 			DT.tooltip:AddLine(join(" ", format(displayString, name), AddTexture(icon), (i == active and activeString or inactiveString)), 1, 1, 1)
 		end
@@ -155,4 +156,4 @@ local function ValueColorUpdate()
 end
 E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
-DT:RegisterDatatext("Talent/Loot Specialization", {"PLAYER_ENTERING_WORLD", "CHARACTER_POINTS_CHANGED", "PLAYER_TALENT_UPDATE", "ACTIVE_TALENT_GROUP_CHANGED", "PLAYER_LOOT_SPEC_UPDATED"}, OnEvent, nil, OnClick, OnEnter, nil, L["Talent/Loot Specialization"])
+DT:RegisterDatatext("Talent/Loot Specialization", {"PLAYER_ENTERING_WORLD", "CHARACTER_POINTS_CHANGED", "PLAYER_TALENT_UPDATE", "PLAYER_SPECIALIZATION_CHANGED", "PLAYER_LOOT_SPEC_UPDATED"}, OnEvent, nil, OnClick, OnEnter, nil, L["Talent/Loot Specialization"])
