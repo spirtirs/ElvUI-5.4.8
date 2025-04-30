@@ -474,7 +474,6 @@ end
 
 function E:PLAYER_SPECIALIZATION_CHANGED(unit)
 	if unit ~= "player" then return end
-	print("ElvUI Debug: PLAYER_SPECIALIZATION_CHANGED event triggered")
 	self:CheckRole()
 end
 
