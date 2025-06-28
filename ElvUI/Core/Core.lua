@@ -127,7 +127,7 @@ E.ClassRole = {
 	MONK = {"TANK", "HEALER", "DAMAGER"},
 	PALADIN = {"HEALER", "TANK", "DAMAGER"},
 	SHAMAN = {"HEALER", "DAMAGER", "HEALER"},
-	DRUID = {"HEALER", "DAMAGER", "TANK", "HEALER"}
+	DRUID = {"DAMAGER", "DAMAGER", "TANK", "HEALER"}
 }
 
 E.DispelClasses = {
