@@ -398,6 +398,56 @@ local function LoadSkin()
        
 		b.Favorite:Point("TOPLEFT", b.Icon, "TOPLEFT", -8, 8)
 		b.SelectedTexture:SetTexture(1, 1, 1, 0.1)
+		
+		-- Fix Label positioning and visibility
+		if b.Label then
+			-- Set parent to backdrop if it exists, otherwise to button
+			if b.backdrop then
+				b.Label:SetParent(b.backdrop)
+			else
+				b.Label:SetParent(b)
+			end
+			b.Label:SetDrawLayer("OVERLAY", 7)
+			b.Label:FontTemplate(nil, 12, "OUTLINE")
+			b.Label:SetTextColor(1, 1, 1)
+			b.Label:SetAlpha(1)
+			b.Label:SetShadowOffset(1, -1)
+			b.Label:SetShadowColor(0, 0, 0, 1)
+			b.Label:SetNonSpaceWrap(false)
+			b.Label:SetWordWrap(false)
+			
+			-- Force correct positioning
+			hooksecurefunc(b.Label, "SetPoint", function(self, point, relativeTo, relativePoint, x, y)
+				if point == "TOPLEFT" and relativePoint == "BOTTOMLEFT" then
+					self:ClearAllPoints()
+					self:SetPoint("TOPLEFT", b.Icon, "TOPRIGHT", 5, -2)
+				end
+			end)
+			
+			b.Label:ClearAllPoints()
+			b.Label:Point("TOPLEFT", b.Icon, "TOPRIGHT", 5, -2)
+		end
+		
+		-- Fix Name positioning and visibility
+		if b.Name then
+			-- Set parent to backdrop if it exists, otherwise to button
+			if b.backdrop then
+				b.Name:SetParent(b.backdrop)
+			else
+				b.Name:SetParent(b)
+			end
+			b.Name:SetDrawLayer("OVERLAY", 7)
+			b.Name:FontTemplate(nil, 14, "OUTLINE")
+			b.Name:SetTextColor(1, 1, 1)
+			b.Name:SetAlpha(1)
+			b.Name:SetShadowOffset(1, -1)
+			b.Name:SetShadowColor(0, 0, 0, 1)
+			b.Name:SetNonSpaceWrap(false)
+			b.Name:SetWordWrap(false)
+			
+			b.Name:ClearAllPoints()
+			b.Name:Point("TOPLEFT", b.Label, "BOTTOMLEFT", 0, -2)
+		end
 	end
 
 	--Set quality color on set item buttons

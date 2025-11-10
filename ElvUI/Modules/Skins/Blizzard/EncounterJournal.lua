@@ -16,7 +16,20 @@ local SHOW_MAP = SHOW_MAP
 local function LoadSkin()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.encounterjournal then return end
 
-	EncounterJournal.inset:StripTextures(true)
+	-- Check if EncounterJournal exists
+	if not EncounterJournal then return end
+	
+	-- Additional safety check for common UI elements
+	local function SafeCall(func)
+		local success, err = pcall(func)
+		if not success then
+			print("ElvUI EncounterJournal Skin Error:", err)
+		end
+	end
+
+	if EncounterJournal.inset then
+		EncounterJournal.inset:StripTextures(true)
+	end
 	EncounterJournal:StripTextures(true)
 	EncounterJournal:SetTemplate("Transparent")
 
@@ -25,18 +38,26 @@ local function LoadSkin()
 		S:Unhook(self, "OnShow")
 	end)
 
-	S:HandleCloseButton(EncounterJournalCloseButton)
+	if EncounterJournalCloseButton then
+		S:HandleCloseButton(EncounterJournalCloseButton)
+	end
 
 	-- NavBar
-	EncounterJournal.navBar:StripTextures(true)
-	EncounterJournal.navBar:CreateBackdrop()
-	EncounterJournal.navBar.backdrop:Point("TOPLEFT", -2, 0)
-	EncounterJournal.navBar.backdrop:Point("BOTTOMRIGHT")
-	EncounterJournal.navBar:Point("TOPLEFT", 13, -20)
+	if EncounterJournal.navBar then
+		EncounterJournal.navBar:StripTextures(true)
+		EncounterJournal.navBar:CreateBackdrop()
+		EncounterJournal.navBar.backdrop:Point("TOPLEFT", -2, 0)
+		EncounterJournal.navBar.backdrop:Point("BOTTOMRIGHT")
+		EncounterJournal.navBar:Point("TOPLEFT", 13, -20)
 
-	EncounterJournal.navBar.overlay:StripTextures(true)
+		if EncounterJournal.navBar.overlay then
+			EncounterJournal.navBar.overlay:StripTextures(true)
+		end
 
-	S:HandleButton(EncounterJournal.navBar.home, true)
+		if EncounterJournal.navBar.home then
+			S:HandleButton(EncounterJournal.navBar.home, true)
+		end
+	end
 
 	local function navButtonFrameLevel(frame)
 		for i = 1, #frame.navList do
@@ -102,44 +123,73 @@ local function LoadSkin()
 	EncounterJournalEncounterFrameInfoModelTab:Point("TOP", EncounterJournalEncounterFrameInfoLootTab, "BOTTOM", 0, -10)
 
 	-- Dungeon / Raid Select
-	EncounterJournal.instanceSelect:StripTextures(true)
-
-	EncounterJournalInstanceSelectTier:Point("TOPLEFT", 31, -15)
-
-	S:HandleNextPrevButton(EncounterJournalInstanceSelectScrollDownButton)
-	EncounterJournalInstanceSelectScrollDownButton:ClearAllPoints()
-	EncounterJournalInstanceSelectScrollDownButton:Point("RIGHT", EncounterJournalInstanceSelectTier, "LEFT", -4, 1)
-	EncounterJournalInstanceSelectScrollDownButton:Size(20)
-
-	EncounterJournal.instanceSelect.scroll:CreateBackdrop("Transparent")
-	EncounterJournal.instanceSelect.scroll.backdrop:Point("TOPLEFT", 6, 1)
-	EncounterJournal.instanceSelect.scroll.backdrop:Point("BOTTOMRIGHT", -25, -2)
-	EncounterJournal.instanceSelect.scroll:Point("TOPLEFT", 1, -46)
-
-	S:HandleScrollBar(EncounterJournal.instanceSelect.scroll.ScrollBar)
-	EncounterJournal.instanceSelect.scroll.ScrollBar:ClearAllPoints()
-	EncounterJournal.instanceSelect.scroll.ScrollBar:Point("TOPRIGHT", EncounterJournal.instanceSelect.scroll, 1, -14)
-	EncounterJournal.instanceSelect.scroll.ScrollBar:Point("BOTTOMRIGHT", EncounterJournal.instanceSelect.scroll, 0, 13)
-
-	for _, tab in pairs({EncounterJournal.instanceSelect.dungeonsTab, EncounterJournal.instanceSelect.raidsTab}) do
-		tab:StripTextures()
-		tab:CreateBackdrop(nil, true)
-		tab:Height(28)
-		tab.SetHeight = E.noop
-		tab:SetHitRectInsets(0, 0, 0, 0)
-		tab.backdrop:SetFrameLevel(tab:GetFrameLevel() - 1)
-
-		local region = tab.grayBox:GetRegions()
-		if region.IsObjectType and region:IsObjectType("Texture") and region:GetTexture() then
-			region:SetInside(tab.backdrop)
-		end
-
-		tab:HookScript("OnEnter", S.SetModifiedBackdrop)
-		tab:HookScript("OnLeave", S.SetOriginalBackdrop)
+	if EncounterJournal.instanceSelect then
+		EncounterJournal.instanceSelect:StripTextures(true)
 	end
 
-	EncounterJournal.instanceSelect.raidsTab:Point("BOTTOMRIGHT", EncounterJournalInstanceSelect, "TOPRIGHT", -29, -36)
-	EncounterJournal.instanceSelect.dungeonsTab:Point("BOTTOMRIGHT", EncounterJournalInstanceSelectRaidTab, "BOTTOMLEFT", -9, 0)
+	if EncounterJournalInstanceSelectTier then
+		EncounterJournalInstanceSelectTier:Point("TOPLEFT", 31, -15)
+	end
+
+	if EncounterJournalInstanceSelectScrollDownButton then
+		S:HandleNextPrevButton(EncounterJournalInstanceSelectScrollDownButton)
+		EncounterJournalInstanceSelectScrollDownButton:ClearAllPoints()
+		if EncounterJournalInstanceSelectTier then
+			EncounterJournalInstanceSelectScrollDownButton:Point("RIGHT", EncounterJournalInstanceSelectTier, "LEFT", -4, 1)
+		end
+		EncounterJournalInstanceSelectScrollDownButton:Size(20)
+	end
+
+	if EncounterJournal.instanceSelect and EncounterJournal.instanceSelect.scroll then
+		EncounterJournal.instanceSelect.scroll:CreateBackdrop("Transparent")
+		EncounterJournal.instanceSelect.scroll.backdrop:Point("TOPLEFT", 6, 1)
+		EncounterJournal.instanceSelect.scroll.backdrop:Point("BOTTOMRIGHT", -25, -2)
+		EncounterJournal.instanceSelect.scroll:Point("TOPLEFT", 1, -46)
+
+		if EncounterJournal.instanceSelect.scroll.ScrollBar then
+			S:HandleScrollBar(EncounterJournal.instanceSelect.scroll.ScrollBar)
+			EncounterJournal.instanceSelect.scroll.ScrollBar:ClearAllPoints()
+			EncounterJournal.instanceSelect.scroll.ScrollBar:Point("TOPRIGHT", EncounterJournal.instanceSelect.scroll, 1, -14)
+			EncounterJournal.instanceSelect.scroll.ScrollBar:Point("BOTTOMRIGHT", EncounterJournal.instanceSelect.scroll, 0, 13)
+		end
+	end
+
+	-- Handle tabs with proper nil checks
+	if EncounterJournal.instanceSelect then
+		local tabs = {}
+		if EncounterJournal.instanceSelect.dungeonsTab then
+			table.insert(tabs, EncounterJournal.instanceSelect.dungeonsTab)
+		end
+		if EncounterJournal.instanceSelect.raidsTab then
+			table.insert(tabs, EncounterJournal.instanceSelect.raidsTab)
+		end
+		
+		for _, tab in pairs(tabs) do
+			tab:StripTextures()
+			tab:CreateBackdrop(nil, true)
+			tab:Height(28)
+			tab.SetHeight = E.noop
+			tab:SetHitRectInsets(0, 0, 0, 0)
+			tab.backdrop:SetFrameLevel(tab:GetFrameLevel() - 1)
+
+			if tab.grayBox then
+				local region = tab.grayBox:GetRegions()
+				if region and region.IsObjectType and region:IsObjectType("Texture") and region:GetTexture() then
+					region:SetInside(tab.backdrop)
+				end
+			end
+
+			tab:HookScript("OnEnter", S.SetModifiedBackdrop)
+			tab:HookScript("OnLeave", S.SetOriginalBackdrop)
+		end
+	end
+
+	if EncounterJournalInstanceSelect and EncounterJournal.instanceSelect and EncounterJournal.instanceSelect.raidsTab then
+		EncounterJournal.instanceSelect.raidsTab:Point("BOTTOMRIGHT", EncounterJournalInstanceSelect, "TOPRIGHT", -29, -36)
+	end
+	if EncounterJournalInstanceSelectRaidTab and EncounterJournal.instanceSelect and EncounterJournal.instanceSelect.dungeonsTab then
+		EncounterJournal.instanceSelect.dungeonsTab:Point("BOTTOMRIGHT", EncounterJournalInstanceSelectRaidTab, "BOTTOMLEFT", -9, 0)
+	end
 
 	local function SkinDungeons()
 		local button1 = EncounterJournalInstanceSelectScrollFrameScrollChildInstanceButton1
