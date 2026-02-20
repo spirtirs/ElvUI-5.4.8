@@ -117,17 +117,15 @@ E.HealingClasses = {
 }
 
 E.ClassRole = {
-	HUNTER = "Melee",
-	ROGUE = "Melee",
 	MAGE = "Caster",
 	PRIEST = "Caster",
 	WARLOCK = "Caster",
-	WARRIOR = {"DAMAGER", "DAMAGER", "TANK"},
-	DEATHKNIGHT = {"TANK", "DAMAGER", "DAMAGER"},
-	MONK = {"TANK", "HEALER", "DAMAGER"},
-	PALADIN = {"HEALER", "TANK", "DAMAGER"},
-	SHAMAN = {"HEALER", "DAMAGER", "HEALER"},
-	DRUID = {"DAMAGER", "DAMAGER", "TANK", "HEALER"}
+	WARRIOR = {"Melee", "Melee", "Tank"},
+	DEATHKNIGHT = {"Tank", "Melee", "Melee"},
+	MONK = {"Tank", "Caster", "Melee"},
+	PALADIN = {"Caster", "Tank", "Melee"},
+	SHAMAN = {"Caster", "Melee", "Caster"},
+	DRUID = {"Caster", "Melee", "Tank", "Caster"}
 }
 
 E.DispelClasses = {
