@@ -100,7 +100,7 @@ local function LoadSkin()
 	PlayerTalentFrameSpecialization:StripTextures()
 	PlayerTalentFrameSpecialization:CreateBackdrop("Transparent")
 	PlayerTalentFrameSpecialization.backdrop:Point("TOPLEFT", 235, -16)
-	PlayerTalentFrameSpecialization.backdrop:Point("BOTTOMRIGHT", -17, 330)
+	PlayerTalentFrameSpecialization.backdrop:Point("BOTTOMRIGHT", -17, 100)
 
 	for i = 1, 5 do
 		select(i, PlayerTalentFrameSpecializationSpellScrollFrameScrollChild:GetRegions()):Hide()
@@ -148,7 +148,7 @@ local function LoadSkin()
 		PlayerTalentFramePetSpecialization:StripTextures()
 		PlayerTalentFramePetSpecialization:CreateBackdrop("Transparent")
 		PlayerTalentFramePetSpecialization.backdrop:Point("TOPLEFT", 235, -16)
-		PlayerTalentFramePetSpecialization.backdrop:Point("BOTTOMRIGHT", -17, 330)
+		PlayerTalentFramePetSpecialization.backdrop:Point("BOTTOMRIGHT", -17, 100)
 
 		for i = 1, 5 do
 			select(i, PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild:GetRegions()):Hide()
