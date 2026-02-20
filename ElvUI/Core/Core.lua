@@ -117,6 +117,8 @@ E.HealingClasses = {
 }
 
 E.ClassRole = {
+	HUNTER = "Melee",
+	ROGUE = "Melee",
 	MAGE = "Caster",
 	PRIEST = "Caster",
 	WARLOCK = "Caster",
