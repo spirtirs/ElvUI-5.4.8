@@ -110,7 +110,7 @@ function E:CheckRole()
 		local base, posBuff, negBuff = UnitAttackPower("player")
 		local playerAp = base + posBuff + negBuff
 
-		role = ((playerAp > playerInt) or (playerAgi > playerInt)) and "DAMAGER" or "HEALER"
+		role = ((playerAp > playerInt) or (playerAgi > playerInt)) and "Melee" or "Caster"
 	end
 
 	if E.role ~= role then
@@ -492,7 +492,7 @@ function E:LoadAPI()
 	E:RegisterEvent("NEUTRAL_FACTION_SELECT_RESULT")
 	E:RegisterEvent("PET_BATTLE_CLOSE", "AddNonPetBattleFrames")
 	E:RegisterEvent("PET_BATTLE_OPENING_START", "RemoveNonPetBattleFrames")
-	E:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", "PLAYER_SPECIALIZATION_CHANGED")
+	E:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", "CheckRole")
 	E:RegisterEvent("PLAYER_TALENT_UPDATE", "PLAYER_TALENT_UPDATE")
 	E:RegisterEvent("PLAYER_ROLES_ASSIGNED", "CheckRole")
 	E:RegisterEvent("UNIT_ENTERED_VEHICLE", "EnterVehicleHideFrames")
